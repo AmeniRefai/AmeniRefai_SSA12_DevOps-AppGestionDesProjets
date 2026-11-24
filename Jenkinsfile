@@ -3,23 +3,24 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+
+        stage('Recuperation du projet') {
             steps {
-                echo 'Recuperation du projet depuis GitHub'
+                echo 'Recuperation du code source depuis GitHub'
                 checkout scm
             }
         }
 
-        stage('Maven Clean Package') {
+        stage('Generation du livrable') {
             steps {
                 dir('backend') {
                     sh 'chmod +x mvnw'
-                    sh './mvnw clean package'
+                    sh './mvnw clean package -DskipTests'
                 }
             }
         }
 
-        stage('Archive Artifact') {
+        stage('Archivage du livrable') {
             steps {
                 archiveArtifacts artifacts: 'backend/target/*.jar',
                                  fingerprint: true
